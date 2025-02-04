@@ -38,12 +38,12 @@ class _MainScreenState extends State<MainScreen> {
               onPressed: () => context.read<MainScreenBloc>().add(MainScreenAdvanceSingleStep()),
               tooltip: 'Advance Single Step',
             ),
+            Text('Step: ${state.step}'),
             IconButton(
               icon: const Icon(Icons.replay),
               onPressed: () => context.read<MainScreenBloc>().add(MainScreenResetPressed()),
               tooltip: 'Reset',
             ),
-            Text('Step: ${state.step}'),
           ],
         ),
         body: GridView.count(
@@ -56,6 +56,7 @@ class _MainScreenState extends State<MainScreen> {
               child: Container(
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.grey),
+                  //tiles could return null if tiles not yet initialized!
                   color: state.tiles[Coordinates(x: x, y: y)] ?? false ? Colors.black : Colors.white,
                 ),
               ),

@@ -3,7 +3,6 @@ import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../../model/coordinate.dart';
-import '../../../model/tile.dart';
 
 part 'main_screen_bloc.g.dart';
 
@@ -28,7 +27,6 @@ class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
   }
 
   void _onMainScreenTileKlicked(MainScreenTileKlicked event, Emitter<MainScreenState> emit) {
-    print('Tile clicked: ${event.coordinates}');
     final tiles = Map.of(state.tiles);
     final coordinates = event.coordinates;
     tiles[coordinates] = !tiles[coordinates]!;
@@ -39,7 +37,9 @@ class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
     emit(state.copyWith(isRunning: !state.isRunning));
   }
 
-  void _onMainScreenAdvanceSingleStep(MainScreenAdvanceSingleStep event, Emitter<MainScreenState> emit) {}
+  void _onMainScreenAdvanceSingleStep(MainScreenAdvanceSingleStep event, Emitter<MainScreenState> emit) {
+    _continueStep(emit);
+  }
 
   void _onMainScreenResetPressed(MainScreenResetPressed event, Emitter<MainScreenState> emit) {
     final tiles = <Coordinates, bool>{};
@@ -63,5 +63,49 @@ class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
       }
     }
     emit(state.copyWith(tiles: tiles));
+  }
+
+  void _continueStep(Emitter<MainScreenState> emit) {
+    var tiles = Map.of(state.tiles);
+    //remember old tiles for state determination
+    var oldTiles = state.tiles;
+    for (int x = 0; x <= sizeX; x++) {
+      for (int y = 0; y <= sizeY; y++) {
+        var pos = Coordinates(x: x, y: y);
+        var neighbourCount = _countNeighbours(pos);
+        if (oldTiles[pos] == true) {
+          if (neighbourCount == 2 || neighbourCount == 3) {
+            continue;
+          } else {
+            tiles[pos] = false;
+          }
+        } else {
+          if (neighbourCount == 3) {
+            tiles[pos] = true;
+          } else {
+            continue;
+          }
+        }
+      }
+    }
+    emit(state.copyWith(tiles: tiles, step: state.step + 1));
+  }
+
+  int _countNeighbours(Coordinates tile) {
+    int neighbours = 0;
+    for (int x = -1; x <= 1; x++) {
+      for (int y = -1; y <= 1; y++) {
+        var currentTile = Coordinates(x: (tile.x + x) % sizeX, y: (tile.y + y) % sizeY);
+        //tile would check itself => continue
+        if (tile == currentTile) {
+          continue;
+        }
+
+        if (state.tiles[currentTile] ?? false) {
+          neighbours++;
+        }
+      }
+    }
+    return neighbours;
   }
 }
