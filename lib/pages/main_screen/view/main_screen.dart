@@ -28,6 +28,18 @@ class _MainScreenState extends State<MainScreen> {
         appBar: AppBar(
           title: const Text('Conways Game Of Life'),
           actions: [
+            Text("Step duration: ${state.stepDurationMs} ms"),
+            Slider(
+              min: 100,
+              max: 2000,
+              value: state.stepDurationMs.toDouble(),
+              onChanged: (state.isRunning)
+                  ? null
+                  : (double value) {
+                      context.read<MainScreenBloc>().add(MainScreenAutoplaySpeedChanged(value.toInt()));
+                    },
+              label: "Autoplay Speed: ${state.stepDurationMs} ms",
+            ),
             IconButton(
               icon: (state.isRunning) ? const Icon(Icons.pause) : const Icon(Icons.play_arrow),
               onPressed: () => context.read<MainScreenBloc>().add(MainScreenPlayPressed()),
@@ -35,7 +47,8 @@ class _MainScreenState extends State<MainScreen> {
             ),
             IconButton(
               icon: const Icon(Icons.next_plan_outlined),
-              onPressed: () => context.read<MainScreenBloc>().add(MainScreenAdvanceSingleStep()),
+              onPressed:
+                  (state.isRunning) ? null : () => context.read<MainScreenBloc>().add(MainScreenAdvanceSingleStep()),
               tooltip: 'Advance Single Step',
             ),
             Text('Step: ${state.step}'),

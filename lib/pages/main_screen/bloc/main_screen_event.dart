@@ -1,4 +1,4 @@
-part of  "main_screen_bloc.dart";
+part of "main_screen_bloc.dart";
 
 sealed class MainScreenEvent {}
 
@@ -22,4 +22,10 @@ class MainScreenTileKlicked extends MainScreenEvent {
   final Coordinates coordinates;
 
   MainScreenTileKlicked(this.coordinates);
+}
+
+class MainScreenAutoplaySpeedChanged extends MainScreenEvent {
+  final int newValue;
+
+  MainScreenAutoplaySpeedChanged(this.newValue);
 }

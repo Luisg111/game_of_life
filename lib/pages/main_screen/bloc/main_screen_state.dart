@@ -2,14 +2,16 @@ part of "main_screen_bloc.dart";
 
 @CopyWith()
 class MainScreenState extends Equatable {
-  final Map<Coordinates,bool> tiles;
+  final Map<Coordinates, bool> tiles;
   final bool isRunning;
   final int step;
+  final int stepDurationMs;
 
   const MainScreenState({
     this.tiles = const {},
     this.step = 0,
     this.isRunning = false,
+    this.stepDurationMs = 1000,
   });
 
   @override
@@ -17,5 +19,6 @@ class MainScreenState extends Equatable {
         tiles,
         step,
         isRunning,
+        stepDurationMs,
       ];
 }

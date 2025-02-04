@@ -13,6 +13,8 @@ abstract class _$MainScreenStateCWProxy {
 
   MainScreenState isRunning(bool isRunning);
 
+  MainScreenState stepDurationMs(int stepDurationMs);
+
   /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `MainScreenState(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
   ///
   /// Usage
@@ -23,6 +25,7 @@ abstract class _$MainScreenStateCWProxy {
     Map<Coordinates, bool> tiles,
     int step,
     bool isRunning,
+    int stepDurationMs,
   });
 }
 
@@ -42,6 +45,10 @@ class _$MainScreenStateCWProxyImpl implements _$MainScreenStateCWProxy {
   MainScreenState isRunning(bool isRunning) => this(isRunning: isRunning);
 
   @override
+  MainScreenState stepDurationMs(int stepDurationMs) =>
+      this(stepDurationMs: stepDurationMs);
+
+  @override
 
   /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `MainScreenState(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
   ///
@@ -53,6 +60,7 @@ class _$MainScreenStateCWProxyImpl implements _$MainScreenStateCWProxy {
     Object? tiles = const $CopyWithPlaceholder(),
     Object? step = const $CopyWithPlaceholder(),
     Object? isRunning = const $CopyWithPlaceholder(),
+    Object? stepDurationMs = const $CopyWithPlaceholder(),
   }) {
     return MainScreenState(
       tiles: tiles == const $CopyWithPlaceholder()
@@ -67,6 +75,10 @@ class _$MainScreenStateCWProxyImpl implements _$MainScreenStateCWProxy {
           ? _value.isRunning
           // ignore: cast_nullable_to_non_nullable
           : isRunning as bool,
+      stepDurationMs: stepDurationMs == const $CopyWithPlaceholder()
+          ? _value.stepDurationMs
+          // ignore: cast_nullable_to_non_nullable
+          : stepDurationMs as int,
     );
   }
 }

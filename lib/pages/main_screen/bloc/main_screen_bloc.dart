@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:equatable/equatable.dart';
@@ -10,20 +12,27 @@ part 'main_screen_state.dart';
 
 part 'main_screen_event.dart';
 
-const int sizeX = 20;
-const int sizeY = 20;
+const int sizeX = 30;
+const int sizeY = 10;
 
 class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
+  Timer? autoPlayTimer;
+
   MainScreenBloc() : super(const MainScreenState()) {
     on<MainScreenPlayPressed>(_onMainScreenPlayPressed);
     on<MainScreenAdvanceSingleStep>(_onMainScreenAdvanceSingleStep);
     on<MainScreenResetPressed>(_onMainScreenResetPressed);
     on<MainScreenTileKlicked>(_onMainScreenTileKlicked);
+    on<MainScreenAutoplaySpeedChanged>(_onMainScreenAutoplaySpeedChanged);
     on<MainScreenInitialize>(_initialize);
   }
 
   void _initialize(MainScreenInitialize event, Emitter<MainScreenState> emit) {
     _initializeTiles(emit);
+  }
+
+  void _onMainScreenAutoplaySpeedChanged(MainScreenAutoplaySpeedChanged event, Emitter<MainScreenState> emit) {
+    emit(state.copyWith(stepDurationMs: event.newValue));
   }
 
   void _onMainScreenTileKlicked(MainScreenTileKlicked event, Emitter<MainScreenState> emit) {
@@ -34,6 +43,11 @@ class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
   }
 
   void _onMainScreenPlayPressed(MainScreenPlayPressed event, Emitter<MainScreenState> emit) {
+    if (state.isRunning) {
+      _stopAutoplay();
+    } else {
+      _startAutoplay();
+    }
     emit(state.copyWith(isRunning: !state.isRunning));
   }
 
@@ -42,17 +56,8 @@ class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
   }
 
   void _onMainScreenResetPressed(MainScreenResetPressed event, Emitter<MainScreenState> emit) {
-    final tiles = <Coordinates, bool>{};
-    for (var i = 0; i < sizeX; i++) {
-      for (var j = 0; j < sizeY; j++) {
-        tiles[Coordinates(x: i, y: j)] = false;
-      }
-    }
-    emit(state.copyWith(
-      tiles: tiles,
-      isRunning: false,
-      step: 0,
-    ));
+    emit(MainScreenState());
+    _initializeTiles(emit);
   }
 
   void _initializeTiles(Emitter<MainScreenState> emit) {
@@ -63,6 +68,21 @@ class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
       }
     }
     emit(state.copyWith(tiles: tiles));
+  }
+
+  void _startAutoplay() {
+    //cancel old timer if it is still running
+    autoPlayTimer?.cancel();
+    //advance manually before timer starts (timer waits first and then calls callback)
+    add(MainScreenAdvanceSingleStep());
+    autoPlayTimer = Timer.periodic(Duration(milliseconds: state.stepDurationMs), (timer) {
+      add(MainScreenAdvanceSingleStep());
+    });
+  }
+
+  void _stopAutoplay() {
+    autoPlayTimer?.cancel();
+    autoPlayTimer == null;
   }
 
   void _continueStep(Emitter<MainScreenState> emit) {
