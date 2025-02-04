@@ -7,7 +7,7 @@ part of 'main_screen_bloc.dart';
 // **************************************************************************
 
 abstract class _$MainScreenStateCWProxy {
-  MainScreenState tiles(List<Tile> tiles);
+  MainScreenState tiles(Map<Coordinates, bool> tiles);
 
   MainScreenState step(int step);
 
@@ -20,7 +20,7 @@ abstract class _$MainScreenStateCWProxy {
   /// MainScreenState(...).copyWith(id: 12, name: "My name")
   /// ````
   MainScreenState call({
-    List<Tile> tiles,
+    Map<Coordinates, bool> tiles,
     int step,
     bool isRunning,
   });
@@ -33,7 +33,7 @@ class _$MainScreenStateCWProxyImpl implements _$MainScreenStateCWProxy {
   final MainScreenState _value;
 
   @override
-  MainScreenState tiles(List<Tile> tiles) => this(tiles: tiles);
+  MainScreenState tiles(Map<Coordinates, bool> tiles) => this(tiles: tiles);
 
   @override
   MainScreenState step(int step) => this(step: step);
@@ -58,7 +58,7 @@ class _$MainScreenStateCWProxyImpl implements _$MainScreenStateCWProxy {
       tiles: tiles == const $CopyWithPlaceholder()
           ? _value.tiles
           // ignore: cast_nullable_to_non_nullable
-          : tiles as List<Tile>,
+          : tiles as Map<Coordinates, bool>,
       step: step == const $CopyWithPlaceholder()
           ? _value.step
           // ignore: cast_nullable_to_non_nullable

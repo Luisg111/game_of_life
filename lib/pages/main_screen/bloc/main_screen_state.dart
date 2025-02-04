@@ -2,12 +2,12 @@ part of "main_screen_bloc.dart";
 
 @CopyWith()
 class MainScreenState extends Equatable {
-  final List<Tile> tiles;
+  final Map<Coordinates,bool> tiles;
   final bool isRunning;
   final int step;
 
   const MainScreenState({
-    this.tiles = const [],
+    this.tiles = const {},
     this.step = 0,
     this.isRunning = false,
   });
