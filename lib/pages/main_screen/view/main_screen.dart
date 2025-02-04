@@ -57,9 +57,7 @@ class _MainScreenState extends State<MainScreen> {
           min: 100,
           max: 2000,
           value: state.stepDurationMs.toDouble(),
-          onChanged: (state.isRunning)
-              ? null
-              : (double value) {
+          onChanged: (double value) {
                   context.read<MainScreenBloc>().add(MainScreenAutoplaySpeedChanged(value.toInt()));
                 },
           label: "Autoplay Speed: ${state.stepDurationMs} ms",

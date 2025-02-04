@@ -29,6 +29,8 @@ class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
 
   void _onMainScreenAutoplaySpeedChanged(MainScreenAutoplaySpeedChanged event, Emitter<MainScreenState> emit) {
     emit(state.copyWith(stepDurationMs: event.newValue));
+    _startAutoplay();
+
   }
 
   void _onMainScreenTileKlicked(MainScreenTileKlicked event, Emitter<MainScreenState> emit) {
