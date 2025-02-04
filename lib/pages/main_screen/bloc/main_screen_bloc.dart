@@ -18,17 +18,12 @@ const int sizeY = 30;
 class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
   Timer? autoPlayTimer;
 
-  MainScreenBloc() : super(const MainScreenState()) {
+  MainScreenBloc() : super(MainScreenState.empty()) {
     on<MainScreenPlayPressed>(_onMainScreenPlayPressed);
     on<MainScreenAdvanceSingleStep>(_onMainScreenAdvanceSingleStep);
     on<MainScreenResetPressed>(_onMainScreenResetPressed);
     on<MainScreenTileKlicked>(_onMainScreenTileKlicked);
     on<MainScreenAutoplaySpeedChanged>(_onMainScreenAutoplaySpeedChanged);
-    on<MainScreenInitialize>(_initialize);
-  }
-
-  void _initialize(MainScreenInitialize event, Emitter<MainScreenState> emit) {
-    _initializeTiles(emit);
   }
 
   void _onMainScreenAutoplaySpeedChanged(MainScreenAutoplaySpeedChanged event, Emitter<MainScreenState> emit) {
@@ -56,18 +51,7 @@ class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
   }
 
   void _onMainScreenResetPressed(MainScreenResetPressed event, Emitter<MainScreenState> emit) {
-    emit(MainScreenState());
-    _initializeTiles(emit);
-  }
-
-  void _initializeTiles(Emitter<MainScreenState> emit) {
-    final tiles = <Coordinates, bool>{};
-    for (var i = 0; i < sizeX; i++) {
-      for (var j = 0; j < sizeY; j++) {
-        tiles[Coordinates(x: i, y: j)] = false;
-      }
-    }
-    emit(state.copyWith(tiles: tiles));
+    emit(MainScreenState.empty());
   }
 
   void _startAutoplay() {

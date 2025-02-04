@@ -14,6 +14,21 @@ class MainScreenState extends Equatable {
     this.stepDurationMs = 1000,
   });
 
+  factory MainScreenState.empty() {
+    final tiles = <Coordinates, bool>{};
+    for (var i = 0; i < sizeX; i++) {
+      for (var j = 0; j < sizeY; j++) {
+        tiles[Coordinates(x: i, y: j)] = false;
+      }
+    }
+    return MainScreenState(
+      tiles: tiles,
+      step: 0,
+      stepDurationMs: 1000,
+      isRunning: false,
+    );
+  }
+
   @override
   List<Object?> get props => [
         tiles,

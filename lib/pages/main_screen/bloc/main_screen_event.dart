@@ -2,10 +2,6 @@ part of "main_screen_bloc.dart";
 
 sealed class MainScreenEvent {}
 
-class MainScreenInitialize extends MainScreenEvent {
-  MainScreenInitialize();
-}
-
 class MainScreenPlayPressed extends MainScreenEvent {
   MainScreenPlayPressed();
 }

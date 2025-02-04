@@ -10,7 +10,7 @@ class MainView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(create: (context) => MainScreenBloc()..add(MainScreenInitialize()), child: const MainScreen());
+    return BlocProvider(create: (context) => MainScreenBloc(), child: const MainScreen());
   }
 }
 
