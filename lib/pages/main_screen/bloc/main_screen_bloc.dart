@@ -13,7 +13,7 @@ part 'main_screen_state.dart';
 part 'main_screen_event.dart';
 
 const int sizeX = 30;
-const int sizeY = 10;
+const int sizeY = 30;
 
 class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
   Timer? autoPlayTimer;
