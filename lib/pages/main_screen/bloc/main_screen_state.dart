@@ -11,7 +11,7 @@ class MainScreenState extends Equatable {
     this.tiles = const {},
     this.step = 0,
     this.isRunning = false,
-    this.stepDurationMs = 1000,
+    this.stepDurationMs = 500,
   });
 
   factory MainScreenState.empty() {
@@ -24,7 +24,7 @@ class MainScreenState extends Equatable {
     return MainScreenState(
       tiles: tiles,
       step: 0,
-      stepDurationMs: 1000,
+      stepDurationMs: 500,
       isRunning: false,
     );
   }

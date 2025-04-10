@@ -27,20 +27,24 @@ class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
     on<MainScreenAutoplaySpeedChanged>(_onMainScreenAutoplaySpeedChanged);
   }
 
-  void _onMainScreenAutoplaySpeedChanged(MainScreenAutoplaySpeedChanged event, Emitter<MainScreenState> emit) {
+  void _onMainScreenAutoplaySpeedChanged(
+      MainScreenAutoplaySpeedChanged event, Emitter<MainScreenState> emit) {
     emit(state.copyWith(stepDurationMs: event.newValue));
-    _startAutoplay();
-
+    if (state.isRunning) {
+      _startAutoplay();
+    }
   }
 
-  void _onMainScreenTileKlicked(MainScreenTileKlicked event, Emitter<MainScreenState> emit) {
+  void _onMainScreenTileKlicked(
+      MainScreenTileKlicked event, Emitter<MainScreenState> emit) {
     final tiles = Map.of(state.tiles);
     final coordinates = event.coordinates;
     tiles[coordinates] = !tiles[coordinates]!;
     emit(state.copyWith(tiles: tiles));
   }
 
-  void _onMainScreenPlayPressed(MainScreenPlayPressed event, Emitter<MainScreenState> emit) {
+  void _onMainScreenPlayPressed(
+      MainScreenPlayPressed event, Emitter<MainScreenState> emit) {
     if (state.isRunning) {
       _stopAutoplay();
     } else {
@@ -49,12 +53,15 @@ class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
     emit(state.copyWith(isRunning: !state.isRunning));
   }
 
-  void _onMainScreenAdvanceSingleStep(MainScreenAdvanceSingleStep event, Emitter<MainScreenState> emit) {
-    GameOfLifeLogic.continueStep(playField: state.tiles, sizeX: sizeX, sizeY: sizeY);
+  void _onMainScreenAdvanceSingleStep(
+      MainScreenAdvanceSingleStep event, Emitter<MainScreenState> emit) {
+    GameOfLifeLogic.continueStep(
+        playField: state.tiles, sizeX: sizeX, sizeY: sizeY);
     emit(state.copyWith(tiles: state.tiles, step: (state.step) + 1));
   }
 
-  void _onMainScreenResetPressed(MainScreenResetPressed event, Emitter<MainScreenState> emit) {
+  void _onMainScreenResetPressed(
+      MainScreenResetPressed event, Emitter<MainScreenState> emit) {
     emit(MainScreenState.empty());
   }
 
@@ -63,7 +70,8 @@ class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
     autoPlayTimer?.cancel();
     //advance manually before timer starts (timer waits first and then calls callback)
     add(MainScreenAdvanceSingleStep());
-    autoPlayTimer = Timer.periodic(Duration(milliseconds: state.stepDurationMs), (timer) {
+    autoPlayTimer =
+        Timer.periodic(Duration(milliseconds: state.stepDurationMs), (timer) {
       add(MainScreenAdvanceSingleStep());
     });
   }
